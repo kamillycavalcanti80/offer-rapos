@@ -36,7 +36,8 @@
         utm_campaign: qs.get("utm_campaign") || "",
         utm_content: qs.get("utm_content") || "",
         utm_term: qs.get("utm_term") || "",
-        t: Date.now()
+        t: qs.get("t") || "",
+        t0: Date.now()
       };
       localStorage.setItem("_trk", JSON.stringify(dado));
       document.cookie = "_trk=" + encodeURIComponent(JSON.stringify(dado)) +
