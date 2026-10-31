@@ -159,7 +159,9 @@
 
 <script>
     /* ============ TRACKER __TRK__ ============ */
-  var TRACKER_BASE = "https://tracker.kamilly-cavalcanti80.workers.dev";
+  /* caminho relativo: o evento sai pela MESMA origem do funil, entao
+     adblock/ITP nao tem dominio de terceiro pra barrar */
+  var TRACKER_BASE = "/trk";
   function trk() {
     try { return JSON.parse(localStorage.getItem("_trk") || "null") || {}; } catch (e) { return {}; }
   }
