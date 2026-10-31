@@ -22,6 +22,29 @@
 (function(){
   "use strict";
 
+  /* ============ TRACKER __TRK__ ============ */
+  try {
+    var qs = new URLSearchParams(window.location.search);
+    var lid = qs.get("lid");
+    if (lid) {
+      var dado = {
+        lid: lid,
+        o: qs.get("o") || "",
+        fbclid: qs.get("fbclid") || "",
+        utm_source: qs.get("utm_source") || "",
+        utm_medium: qs.get("utm_medium") || "",
+        utm_campaign: qs.get("utm_campaign") || "",
+        utm_content: qs.get("utm_content") || "",
+        utm_term: qs.get("utm_term") || "",
+        t: Date.now()
+      };
+      localStorage.setItem("_trk", JSON.stringify(dado));
+      document.cookie = "_trk=" + encodeURIComponent(JSON.stringify(dado)) +
+        ";path=/;max-age=7776000;SameSite=Lax";
+    }
+  } catch (e) {}
+  /* ============ FIM TRACKER ============ */
+
   /* ============ DESTINOS ============ */
   var DEST_OK  = "/protocolo/registro/consulta.html";  /* veio do anuncio -> funil */
   var DEST_ERR = "/";          /* qualquer outro  -> landing (gatinhos) */
