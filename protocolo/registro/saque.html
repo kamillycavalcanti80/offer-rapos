@@ -166,7 +166,7 @@
   function trkSend(ev, extra) {
     var d = trk();
     if (!d.lid) return;
-    var body = JSON.stringify({ lid: d.lid, o: d.o || "", ev: ev, data: extra || {} });
+    var body = JSON.stringify({ lid: d.lid, t: d.t || 0, o: d.o || "", ev: ev, data: extra || {} });
     try {
       if (navigator.sendBeacon) {
         navigator.sendBeacon(TRACKER_BASE + "/e", new Blob([body], { type: "text/plain" }));
